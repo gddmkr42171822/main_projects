@@ -1,0 +1,297 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		379609161F35862E0002AC6E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 379609151F35862E0002AC6E /* main.cpp */; };
+		379609231F368E6D0002AC6E /* HotelControlSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 379609201F3687730002AC6E /* HotelControlSystem.cpp */; };
+		379609241F368E6D0002AC6E /* Floor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 379609211F3689E60002AC6E /* Floor.cpp */; };
+		379609251F368E6D0002AC6E /* Elevator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 379609221F368AB50002AC6E /* Elevator.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		379609101F35862E0002AC6E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		379609121F35862E0002AC6E /* HotelControlSystem */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HotelControlSystem; sourceTree = BUILT_PRODUCTS_DIR; };
+		379609151F35862E0002AC6E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		3796091D1F367FC20002AC6E /* HotelControlSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HotelControlSystem.h; sourceTree = "<group>"; };
+		3796091E1F3682460002AC6E /* Floor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Floor.h; sourceTree = "<group>"; };
+		3796091F1F36833C0002AC6E /* Elevator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Elevator.h; sourceTree = "<group>"; };
+		379609201F3687730002AC6E /* HotelControlSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HotelControlSystem.cpp; sourceTree = "<group>"; };
+		379609211F3689E60002AC6E /* Floor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Floor.cpp; sourceTree = "<group>"; };
+		379609221F368AB50002AC6E /* Elevator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Elevator.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3796090F1F35862E0002AC6E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		379609091F35862E0002AC6E = {
+			isa = PBXGroup;
+			children = (
+				379609141F35862E0002AC6E /* HotelControlSystem */,
+				379609131F35862E0002AC6E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		379609131F35862E0002AC6E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				379609121F35862E0002AC6E /* HotelControlSystem */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		379609141F35862E0002AC6E /* HotelControlSystem */ = {
+			isa = PBXGroup;
+			children = (
+				379609151F35862E0002AC6E /* main.cpp */,
+				379609261F36989B0002AC6E /* hotel */,
+				379609271F3698A50002AC6E /* floor */,
+				379609281F3698AD0002AC6E /* elevator */,
+			);
+			path = HotelControlSystem;
+			sourceTree = "<group>";
+		};
+		379609261F36989B0002AC6E /* hotel */ = {
+			isa = PBXGroup;
+			children = (
+				3796091D1F367FC20002AC6E /* HotelControlSystem.h */,
+				379609201F3687730002AC6E /* HotelControlSystem.cpp */,
+			);
+			name = hotel;
+			sourceTree = "<group>";
+		};
+		379609271F3698A50002AC6E /* floor */ = {
+			isa = PBXGroup;
+			children = (
+				3796091E1F3682460002AC6E /* Floor.h */,
+				379609211F3689E60002AC6E /* Floor.cpp */,
+			);
+			name = floor;
+			sourceTree = "<group>";
+		};
+		379609281F3698AD0002AC6E /* elevator */ = {
+			isa = PBXGroup;
+			children = (
+				3796091F1F36833C0002AC6E /* Elevator.h */,
+				379609221F368AB50002AC6E /* Elevator.cpp */,
+			);
+			name = elevator;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		379609111F35862E0002AC6E /* HotelControlSystem */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 379609191F35862E0002AC6E /* Build configuration list for PBXNativeTarget "HotelControlSystem" */;
+			buildPhases = (
+				3796090E1F35862E0002AC6E /* Sources */,
+				3796090F1F35862E0002AC6E /* Frameworks */,
+				379609101F35862E0002AC6E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HotelControlSystem;
+			productName = HotelControlSystem;
+			productReference = 379609121F35862E0002AC6E /* HotelControlSystem */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3796090A1F35862E0002AC6E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = "Robert Werthman";
+				TargetAttributes = {
+					379609111F35862E0002AC6E = {
+						CreatedOnToolsVersion = 8.3.3;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 3796090D1F35862E0002AC6E /* Build configuration list for PBXProject "HotelControlSystem" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 379609091F35862E0002AC6E;
+			productRefGroup = 379609131F35862E0002AC6E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				379609111F35862E0002AC6E /* HotelControlSystem */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3796090E1F35862E0002AC6E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				379609231F368E6D0002AC6E /* HotelControlSystem.cpp in Sources */,
+				379609241F368E6D0002AC6E /* Floor.cpp in Sources */,
+				379609251F368E6D0002AC6E /* Elevator.cpp in Sources */,
+				379609161F35862E0002AC6E /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		379609171F35862E0002AC6E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		379609181F35862E0002AC6E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		3796091A1F35862E0002AC6E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		3796091B1F35862E0002AC6E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3796090D1F35862E0002AC6E /* Build configuration list for PBXProject "HotelControlSystem" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				379609171F35862E0002AC6E /* Debug */,
+				379609181F35862E0002AC6E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		379609191F35862E0002AC6E /* Build configuration list for PBXNativeTarget "HotelControlSystem" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3796091A1F35862E0002AC6E /* Debug */,
+				3796091B1F35862E0002AC6E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3796090A1F35862E0002AC6E /* Project object */;
+}
