@@ -3,22 +3,47 @@ import re
 from os import listdir
 from os.path import isfile
 
+def writeEntireBook(data, author, writer):
+    entireText = ''
+    for line in data:
+      if line:
+        entireText = entireText + line + ' '
+      entireText.rstrip()
+      writer.writerow([author, entireText])
+
+def writeSentence(data, author, writer):
+  for line in data:
+    if line:
+      writer.writerow([author, line])
+
+def writeParagraph(data, author, writer):
+  paragraph = ''
+  for line in data:
+    # If the line is empty then it must be the end of the paragraph
+    if line:
+      paragraph = paragraph + line + ' '
+    else:
+      if paragraph:
+        # Remove the final space on end of each paragraph.
+        paragraph = paragraph.rstrip()
+        writer.writerow([author, paragraph])
+      paragraph = ''
 
 def main():
   writeParagraph = False
-  writeEntireText = True
+  writeEntireText = False
 
   # Create a list of the relatives paths to all of the raw files.
-  samples = []
+  raw_files = []
   for f in listdir('raw_data/'):
     if f.endswith('.txt') and isfile('raw_data/%s' % f):
-      samples.append(f)
+      raw_files.append(f)
 
-  for sample in samples:
-    filename = sample.replace('.txt', '')
+  for raw_file in raw_files:
+    filename = raw_file.replace('.txt', '')
     author = filename.partition('_')[0]
-    header = 'Produced by'
-    footer = 'End of'
+    # header = 'Produced by'
+    # footer = 'End of'
 
     f = open('raw_data/%s.txt' % filename, 'r')
     data = f.read()
@@ -49,31 +74,11 @@ def main():
     with open('csv_data/%s.csv' % filename, 'w') as csvfile:
       writer = csv.writer(csvfile)
       if writeParagraph:
-        # Add each line of the paragraph to a string separate by spaces.
-        paragraph = ''
-        for line in data:
-          if line:
-            paragraph = paragraph + line + ' '
-          else:
-            if paragraph:
-              # Remove the final space on end of each paragraph.
-              paragraph = paragraph.rstrip()
-              writer.writerow([author, paragraph])
-            paragraph = ''
+        writeParagraph(data, author, writer)
       elif writeEntireText:
-        # Create csv file with single line contain entire text.
-        entireText = ''
-        for line in data:
-          if line:
-            entireText = entireText + line + ' '
-        entireText.rstrip()
-        writer.writerow([author, entireText])
+        writeEntireBook(data, author, writer)
       else:
-        # Create csv file with each line as a new row.
-        for line in data:
-          # If the line is not an empty string.
-          if line:
-            writer.writerow([author, line])
+        writeSentence(data, author, writer)
 
 if __name__ == '__main__':
   main()
