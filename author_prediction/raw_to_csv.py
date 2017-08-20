@@ -42,27 +42,13 @@ def main():
   for raw_file in raw_files:
     filename = raw_file.replace('.txt', '')
     author = filename.partition('_')[0]
-    # header = 'Produced by'
-    # footer = 'End of'
 
     f = open('raw_data/%s.txt' % filename, 'r')
     data = f.read()
     f.close()
 
-    # Get everything after the header
-    # data = data.partition(header)[2]
-
-    # Get everything before the footer
-    # data = data.partition(footer)[0]
-
     # Create a list out of the lines in the file.
     data = data.split('\n')
-
-    # Remove who produced the project gutenberg work.
-    # del data[0]
-
-    # Remove everything from each of the lines except for spaces and words.
-    # data = [KeepWordsSpaces(line) for line in data]
 
     # Remove any leading whitespace characters and spaces from each line.
     data = [line.lstrip() for line in data]
@@ -70,7 +56,7 @@ def main():
     data = [line.rstrip() for line in data]
 
     # Write out each line to a csv file with column 1 being the author name
-    # and column 2 being the sentence or paragraph.
+    # and column 2 being the sentence, paragraph, or entire book.
     with open('csv_data/%s.csv' % filename, 'w') as csvfile:
       writer = csv.writer(csvfile)
       if writeParagraph:
