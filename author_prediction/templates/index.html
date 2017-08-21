@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html>
+<body>
+<h2>Hello World!</h2>
+{% if author %}
+    The program predicts the author is {{author}}
+    <form action='/' method='POST'>
+    Is this correct (yes or no)? <input type='text' name='isCorrectAuthor'>
+    If not give the correct authors name. <input type='text' name='correctAuthor'>
+    <input type='submit'>
+    </form>
+{% elif incorrect %}
+    Adding author and sentence to database.  Current authors {{authors}}.  Current number of training samples {{num_training_samples}}
+    <form action='/' method='GET'>
+    Return to homepage.<input type='submit'>
+    </form>
+{% else %}
+    <form action='/' method='POST'>
+    Enter a sentence of an author to predict <input type='text' name='sentence'>
+    <input type='submit'>
+    </form>
+{% endif %}
+</body>
+</html

@@ -124,6 +124,30 @@ def createSQLiteDatabase():
 
   return preprocessed_X, y
 
+class AuthorPrediction(object):
+  def __init__(self):
+    self.bag_of_words_vectorizer = CountVectorizer()
+    self.pos_vectorizer = CountVectorizer(tokenizer=POSCountTokenizer())
+    self.fu = FeatureUnion([
+      ('bag_of_words', self.bag_of_words_vectorizer),
+      ('pos_count', self.pos_vectorizer)])
+    self.preprocessed_X, self.y = createSQLiteDatabase()
+    print 'Unique authors in the training data', np.unique(self.y)
+    print 'Number of starting training samples: ', len(self.preprocessed_X)
+    self.clf = MultinomialNB()
+    X = self.fu.fit_transform(self.preprocessed_X)
+    self.clf.fit(X, self.y)
+
+  def AddTrainingSampleToDatabase(self, author, sentence):
+    # Update the sqlite database with the new training sample
+      db = sqlite3.connect('authors.db')
+      cursor = db.cursor()
+      cursor.execute('''
+        INSERT INTO authors(name, sentence) VALUES(?, ?)
+        ''', (author, sentence))
+      db.commit()
+      db.close()
+
 def main():
   
   bag_of_words_vectorizer = CountVectorizer()
