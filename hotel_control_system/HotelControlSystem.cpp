@@ -68,7 +68,7 @@ void HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string direct
     for (i = 0; i < 3; i++) {
         elevator_closeness[i] = this->elevators[i].get_current_floor() - floor_id;
         elevator_direction[i] = this->elevators[i].get_direction_of_travel();
-        elevator_queue_size[i] = this->elevators[i].selected_floors_size();
+        elevator_queue_size[i] = this->elevators[i].destination_floors_queue_size();
     }
     
     // If elevator is moving towards floor and in the same direction
@@ -80,12 +80,12 @@ void HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string direct
             // If the elevator is below or on the floor the person wants to go up
             if (direction == "up" && elevator_closeness[i] <= 0) {
                 printf("Up: Added floor %d to elevator %d.\n", floor_id, i);
-                this->elevators[i].add_floor_to_selected_floors(floor_id);
+                this->elevators[i].add_floor_to_destination_floors_queue(floor_id);
                 return;
             // If the elevator is above or on the floor and the person wants to go down
             } else if (direction == "down" && elevator_closeness[i] >= 0) {
                 printf("Down: Added floor %d to elevator %d.\n", floor_id, i);
-                this->elevators[i].add_floor_to_selected_floors(floor_id);
+                this->elevators[i].add_floor_to_destination_floors_queue(floor_id);
                 return;
             // The elevator is passed the floor the person wants to go to
             } else {
@@ -99,7 +99,7 @@ void HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string direct
     for (i = 0; i < 3; i++) {
         if (elevator_direction[i] == "stopped") {
             printf("Stopped: Added floor %d to elevator %d.\n", floor_id, i);
-            this->elevators[i].add_floor_to_selected_floors(floor_id);
+            this->elevators[i].add_floor_to_destination_floors_queue(floor_id);
             return;
         }
     }
@@ -107,7 +107,7 @@ void HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string direct
     // No elevators are moving in the same direction as the floor, none are stopped either,
     // add the floor to the elevator that will be done the soonest
     int elevator_with_smallest_queue = index_of_smallest_element(elevator_queue_size, 3);
-    this->elevators[elevator_with_smallest_queue].add_floor_to_selected_floors(floor_id);
+    this->elevators[elevator_with_smallest_queue].add_floor_to_destination_floors_queue(floor_id);
     printf("Smallest Queue: Added floor %d to elevator %d.\n", floor_id, elevator_with_smallest_queue);
     return;
 }
@@ -130,5 +130,5 @@ void HotelControlSystem::press_elevator_button_from_floor(Floor &f, std::string 
 // Method is called when a person presses the specific floor button on an elevator
 void HotelControlSystem::press_floor_button_from_elevator(Elevator &e, int selected_floor) {
     // Push the selected floor into the destination queue of the elevator
-    e.add_floor_to_selected_floors(selected_floor);
+    e.add_floor_to_destination_floors_queue(selected_floor);
 }
