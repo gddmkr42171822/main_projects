@@ -12,9 +12,9 @@
 #include <string>
 
 class HotelControlSystem {
-public:
     Floor floors[21];
     Elevator elevators[3];
+public:
 
     void initialize_members();
     
@@ -27,6 +27,9 @@ public:
     void press_floor_button_from_elevator(Elevator &e, int selected_floor);
     
     void dispatch_elevator_to_floor(Floor &f, std::string direction);
+
+    Floor* get_floors();
+    Elevator* get_elevators();
     
 };
 

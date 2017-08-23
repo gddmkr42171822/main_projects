@@ -8,17 +8,24 @@
 #include <iostream>
 #include <stdlib.h>
 
-int indexofSmallestElement(int array[], int size)
+int index_of_smallest_element(int array[], int size)
 {
     int index = 0;
-    
     for (int i = 1; i < size; i++)
     {
-        if(array[i] < array[index])
+        if(array[i] < array[index]) {
             index = i;
+        }
     }
-    
     return index;
+}
+
+Elevator* HotelControlSystem::get_elevators() {
+    return this->elevators;
+}
+
+Floor* HotelControlSystem::get_floors() {
+    return this->floors;
 }
 
 // Initialize the elevators and floors for the hotel control system object
@@ -53,25 +60,56 @@ void HotelControlSystem::show_elevators_current_floor(Elevator &e) {
 // Method determines which elevator to send to the floor
 void HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string direction) {
     int i;
+    int floor_id = f.get_floor_id();
     int elevator_closeness[3];
     std::string elevator_direction[3];
     int elevator_queue_size[3];
+
     for (i = 0; i < 3; i++) {
-        elevator_closeness[i] = abs(this->elevators[i].get_current_floor() - f.get_floor_id());
+        elevator_closeness[i] = this->elevators[i].get_current_floor() - floor_id;
         elevator_direction[i] = this->elevators[i].get_direction_of_travel();
         elevator_queue_size[i] = this->elevators[i].selected_floors_size();
     }
     
-    // If elevator is moving towards floor and in the same direction as
-    // the person wanted then send that elevator to the floor
-    
-    
-    // It the elevator is stopped with nothing in its queue send it to the floor
-    
-    // Otherwise just add the floor to the elevator with the smallest queue
-    int elevator_with_smallest_queue = indexofSmallestElement(elevator_queue_size, 3);
-    this->elevators[elevator_with_smallest_queue].add_floor_to_selected_floors(f.get_floor_id());
-    printf("Added floor %d to elevator %d.\n", f.get_floor_id(), elevator_with_smallest_queue);
+    // If elevator is moving towards floor and in the same direction
+    // the person wants to go then send the first available elevator to the floor
+    for (i = 0; i < 3; i++) {
+        // If the elevator is heading in the same direction the person
+        // on the floor wants to go
+        if (elevator_direction[i] == direction) {
+            // If the elevator is below or on the floor the person wants to go up
+            if (direction == "up" && elevator_closeness[i] <= 0) {
+                printf("Up: Added floor %d to elevator %d.\n", floor_id, i);
+                this->elevators[i].add_floor_to_selected_floors(floor_id);
+                return;
+            // If the elevator is above or on the floor and the person wants to go down
+            } else if (direction == "down" && elevator_closeness[i] >= 0) {
+                printf("Down: Added floor %d to elevator %d.\n", floor_id, i);
+                this->elevators[i].add_floor_to_selected_floors(floor_id);
+                return;
+            // The elevator is passed the floor the person wants to go to
+            } else {
+                printf("Elevator %d is passed floor %d.", i, floor_id);
+            }
+        }
+    }
+
+    // No elevators are moving in the same direction as the floor check if any
+    // are stopped and then dispatch that one
+    for (i = 0; i < 3; i++) {
+        if (elevator_direction[i] == "stopped") {
+            printf("Stopped: Added floor %d to elevator %d.\n", floor_id, i);
+            this->elevators[i].add_floor_to_selected_floors(floor_id);
+            return;
+        }
+    }
+
+    // No elevators are moving in the same direction as the floor, none are stopped either,
+    // add the floor to the elevator that will be done the soonest
+    int elevator_with_smallest_queue = index_of_smallest_element(elevator_queue_size, 3);
+    this->elevators[elevator_with_smallest_queue].add_floor_to_selected_floors(floor_id);
+    printf("Smallest Queue: Added floor %d to elevator %d.\n", floor_id, elevator_with_smallest_queue);
+    return;
 }
 
 // Method is called when a person presses the up or down arrows for an elevator on a certain floor
