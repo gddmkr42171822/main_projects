@@ -34,8 +34,10 @@ void scenario_one() {
     and the lobby.   Elevator 3 is heading up, moving  with a stop at the 15th floor.
     Someone pushed the down button on the 13th floor.
      */
+
+    std::queue<int> *shared_queue = new std::queue<int>;
     HotelControlSystem h = HotelControlSystem();
-    h.initialize_members();
+    h.initialize_members(shared_queue);
 
     Floor* floors = h.get_floors();
     Elevator* elevators = h.get_elevators();
@@ -62,9 +64,32 @@ void scenario_one() {
 
     assert(elevators[1].destination_floors_queue_size() == 3, "Elevator 1 has 3 floors to go to.");
     assert(elevators[2].destination_floors_queue_size() == 2, "Elevator 2 has 2 floors to go to.");
+
+    delete shared_queue;
+}
+
+void test_shared_queue() {
+    std::queue<int> *shared_queue = new std::queue<int>;
+
+    HotelControlSystem h = HotelControlSystem();
+    h.initialize_members(shared_queue);
+
+    Floor* floors = h.get_floors();
+    Elevator* elevators = h.get_elevators();
+
+    elevators[0].add_request_to_queue(10);
+    floors[20].add_request_to_queue(30);
+    floors[2].add_request_to_queue(10);
+    elevators[2].add_request_to_queue(5);
+
+    assert(h.get_request_from_queue() == 10, "Hotel Control System removed the request form the queue.");
+    assert(h.get_request_queue_size() == 3, "Hotel Control System queue is the right size.");
+
+    delete shared_queue;
 }
 
 int main(int argc, const char * argv[]) {
     scenario_one();
+    test_shared_queue();
     return 0;
 }

@@ -42,8 +42,13 @@ bool Floor::floor_direction_button_already_set(std::string direction) {
 }
 
 // The elevators seen on the floor do not have a direction when initialized
-void Floor::initialize_members(int i) {
+void Floor::initialize_members(int i, std::queue<int> *request_queue) {
     this->floor_id = i;
     this->down_button_pressed = false;
     this->up_button_pressed = false;
+    this->request_queue = request_queue;
+}
+
+void Floor::add_request_to_queue(int request) {
+    this->request_queue->push(request);
 }

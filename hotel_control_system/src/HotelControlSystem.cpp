@@ -29,16 +29,18 @@ Floor* HotelControlSystem::get_floors() {
 }
 
 // Initialize the elevators and floors for the hotel control system object
-void HotelControlSystem::initialize_members() {
+void HotelControlSystem::initialize_members(std::queue<int> *request_queue) {
     int i;
     for (i = 0; i < 3; i++) {
         this->elevators[i] = Elevator();
-        this->elevators[i].initialize_members(i);
+        this->elevators[i].initialize_members(i, request_queue);
     }
     for (i = 0; i < 21; i++) {
         this->floors[i] = Floor();
-        this->floors[i].initialize_members(i);
+        this->floors[i].initialize_members(i, request_queue);
     }
+
+    this->request_queue = request_queue;
 }
 
 // Prints out where all the elevators are and what direciton they are travelling
@@ -70,7 +72,7 @@ void HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string direct
         elevator_direction[i] = this->elevators[i].get_direction_of_travel();
         elevator_queue_size[i] = this->elevators[i].destination_floors_queue_size();
     }
-    
+
     // If elevator is moving towards floor and in the same direction
     // the person wants to go then send the first available elevator to the floor
     for (i = 0; i < 3; i++) {
@@ -115,13 +117,13 @@ void HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string direct
 // Method is called when a person presses the up or down arrows for an elevator on a certain floor
 void HotelControlSystem::press_elevator_button_from_floor(Floor &f, std::string direction) {
     printf("%s button pressed on floor %d.\n", direction.c_str(), f.get_floor_id());
-    
+
     // Change the direction button for the floor to what they user pressed
     // If the button was not pressed already for the floor, dispatch an elevator
     if (!f.floor_direction_button_already_set(direction)) {
         std::cout << "Button has not been pressed for that floor yet." << std::endl;
         f.set_floor_direction_button(direction);
-        
+
         // Determine which elevator to dispatch to the floor
         this->dispatch_elevator_to_floor(f, direction);
     }
@@ -131,4 +133,14 @@ void HotelControlSystem::press_elevator_button_from_floor(Floor &f, std::string 
 void HotelControlSystem::press_floor_button_from_elevator(Elevator &e, int selected_floor) {
     // Push the selected floor into the destination queue of the elevator
     e.add_floor_to_destination_floors_queue(selected_floor);
+}
+
+int HotelControlSystem::get_request_from_queue() {
+    int request = this->request_queue->front();
+    this->request_queue->pop();
+    return request;
+}
+
+int HotelControlSystem::get_request_queue_size() {
+    return (int)this->request_queue->size();
 }

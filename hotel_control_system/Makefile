@@ -1,21 +1,24 @@
 CC = g++
-CFLAGS = -Wall -c
+CFLAGS = -Wall -c -g
 LFLAGS = -Wall
 
-main: main.o HotelControlSystem.o Floor.o Elevator.o
-	$(CC) $(LFLAGS) main.o HotelControlSystem.o Floor.o Elevator.o -o main
+main: build/main.o build/HotelControlSystem.o build/Floor.o build/Elevator.o build/Request.o
+	$(CC) $(LFLAGS) build/main.o build/HotelControlSystem.o build/Floor.o build/Elevator.o build/Request.o -o bin/main
 
-main.o: main.cpp HotelControlSystem.h
-	$(CC) $(CFLAGS) main.cpp
+build/main.o: src/main.cpp src/HotelControlSystem.h
+	$(CC) $(CFLAGS) src/main.cpp -o build/main.o
 
-HotelControlSystem.o: HotelControlSystem.cpp HotelControlSystem.h Elevator.h Floor.h
-	$(CC) $(CFLAGS)  HotelControlSystem.cpp
+build/HotelControlSystem.o: src/HotelControlSystem.cpp src/HotelControlSystem.h src/Elevator.h src/Floor.h
+	$(CC) $(CFLAGS) src/HotelControlSystem.cpp -o build/HotelControlSystem.o
 
-Floor.o: Floor.cpp Floor.h
-	$(CC) $(CFLAGS) Floor.cpp
+build/Floor.o: src/Floor.cpp src/Floor.h
+	$(CC) $(CFLAGS) src/Floor.cpp -o build/Floor.o
 
-Elevator.o: Elevator.cpp Elevator.h
-	$(CC) $(CFLAGS) Elevator.cpp
+build/Elevator.o: src/Elevator.cpp src/Elevator.h
+	$(CC) $(CFLAGS) src/Elevator.cpp -o build/Elevator.o
+
+build/Request.o: src/Request.cpp src/Request.h
+	$(CC) $(CFLAGS) src/Request.cpp -o build/Request.o
 
 clean:
-	rm *.o main
+	rm -rf *.o *.dSYM bin/* build/*
