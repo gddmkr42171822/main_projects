@@ -20,13 +20,15 @@ void Elevator::arrival_at_floor() {
 
   // If the floor is part of its destination queue than remove it and
   // alert hotel control system to turn the floors lights off
+  Request *r = new Request(this->current_floor, this->direction_of_travel);
+  this->add_request_to_queue(r);
 
   // Set the floor indicator to false if it pressed for that floor
 
 }
 
 
-void Elevator::initialize_members(int i, std::queue<int> *request_queue) {
+void Elevator::initialize_members(int i, std::queue<Request*> *request_queue) {
     this->elevator_id = i;
     // Current floor and selected floor button are set to the bottom floor
     this->current_floor = 0;
@@ -90,6 +92,6 @@ int Elevator::destination_floors_queue_size() {
     return (int)this->destination_floors_queue.size();
 }
 
-void Elevator::add_request_to_queue(int request) {
+void Elevator::add_request_to_queue(Request *request) {
     this->request_queue->push(request);
 }

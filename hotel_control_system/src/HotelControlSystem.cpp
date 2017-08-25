@@ -29,7 +29,7 @@ Floor* HotelControlSystem::get_floors() {
 }
 
 // Initialize the elevators and floors for the hotel control system object
-void HotelControlSystem::initialize_members(std::queue<int> *request_queue) {
+void HotelControlSystem::initialize_members(std::queue<Request*> *request_queue) {
     int i;
     for (i = 0; i < 3; i++) {
         this->elevators[i] = Elevator();
@@ -37,7 +37,7 @@ void HotelControlSystem::initialize_members(std::queue<int> *request_queue) {
     }
     for (i = 0; i < 21; i++) {
         this->floors[i] = Floor();
-        this->floors[i].initialize_members(i, request_queue);
+        this->floors[i].initialize_members(i);
     }
 
     this->request_queue = request_queue;
@@ -135,8 +135,8 @@ void HotelControlSystem::press_floor_button_from_elevator(Elevator &e, int selec
     e.add_floor_to_destination_floors_queue(selected_floor);
 }
 
-int HotelControlSystem::get_request_from_queue() {
-    int request = this->request_queue->front();
+Request* HotelControlSystem::get_request_from_queue() {
+    Request *request = this->request_queue->front();
     this->request_queue->pop();
     return request;
 }

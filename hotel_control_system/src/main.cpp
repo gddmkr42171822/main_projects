@@ -35,7 +35,7 @@ void scenario_one() {
     Someone pushed the down button on the 13th floor.
      */
 
-    std::queue<int> *shared_queue = new std::queue<int>;
+    std::queue<Request*> *shared_queue = new std::queue<Request*>;
     HotelControlSystem h = HotelControlSystem();
     h.initialize_members(shared_queue);
 
@@ -69,22 +69,25 @@ void scenario_one() {
 }
 
 void test_shared_queue() {
-    std::queue<int> *shared_queue = new std::queue<int>;
+    std::queue<Request*> *shared_queue = new std::queue<Request*>;
 
     HotelControlSystem h = HotelControlSystem();
     h.initialize_members(shared_queue);
 
-    Floor* floors = h.get_floors();
     Elevator* elevators = h.get_elevators();
 
-    elevators[0].add_request_to_queue(10);
-    floors[20].add_request_to_queue(30);
-    floors[2].add_request_to_queue(10);
-    elevators[2].add_request_to_queue(5);
+    Request *r = new Request(2, "up");
+    elevators[0].add_request_to_queue(r);
+    r = new Request(3, "down");
+    elevators[2].add_request_to_queue(r);
 
-    assert(h.get_request_from_queue() == 10, "Hotel Control System removed the request form the queue.");
-    assert(h.get_request_queue_size() == 3, "Hotel Control System queue is the right size.");
+    r = h.get_request_from_queue();
+    assert(r->get_floor() == 2, "Hotel Control System removed request for floor 2.");
+    assert(r->get_direction() == "up", "Hotel Control System remove request for up direction.");
 
+    assert(h.get_request_queue_size() == 1, "Hotel Control System queue is the right size.");
+
+    delete r;
     delete shared_queue;
 }
 

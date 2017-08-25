@@ -8,6 +8,7 @@
 
 #include "Floor.h"
 #include "Elevator.h"
+#include "Request.h"
 
 #include <queue>
 #include <string>
@@ -15,11 +16,11 @@
 class HotelControlSystem {
     Floor floors[21];
     Elevator elevators[3];
-    std::queue<int> *request_queue;
+    std::queue<Request*> *request_queue;
 
 public:
 
-    void initialize_members(std::queue<int> *request_queue);
+    void initialize_members(std::queue<Request*> *request_queue);
 
     // Displays for the floor and elevator
     void display_current_elevator_information();
@@ -35,7 +36,7 @@ public:
     Floor* get_floors();
     Elevator* get_elevators();
 
-    int get_request_from_queue();
+    Request* get_request_from_queue();
     int get_request_queue_size();
 
 };
