@@ -47,7 +47,7 @@ void HotelControlSystem::initialize_members(std::queue<Request*> *request_queue)
 void HotelControlSystem::display_current_elevator_information() {
     int i;
     for (i = 0; i < 3; i++) {
-        printf("Elevator %d is at floor %d heading %s.\n",
+        printf("DCEI: Elevator %d is at floor %d heading %s.\n",
                this->elevators[i].get_elevator_id(),
                this->elevators[i].get_current_floor(),
                this->elevators[i].get_direction_of_travel().c_str());
@@ -56,7 +56,7 @@ void HotelControlSystem::display_current_elevator_information() {
 
 // Prints out the current floor given an elevator
 void HotelControlSystem::show_elevators_current_floor(Elevator &e) {
-    std::cout << "Elevators current floor is " << e.get_current_floor() << std::endl;
+    printf("SECF: Elevators current floor is %d.\n", e.get_current_floor());
 }
 
 // Method determines which elevator to send to the floor
@@ -81,17 +81,17 @@ void HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string direct
         if (elevator_direction[i] == direction) {
             // If the elevator is below or on the floor the person wants to go up
             if (direction == "up" && elevator_closeness[i] <= 0) {
-                printf("Up: Added floor %d to elevator %d.\n", floor_id, i);
+                printf("DETF: Added floor %d to elevator %d.\n", floor_id, i);
                 this->elevators[i].add_floor_to_destination_floors_queue(floor_id);
                 return;
             // If the elevator is above or on the floor and the person wants to go down
             } else if (direction == "down" && elevator_closeness[i] >= 0) {
-                printf("Down: Added floor %d to elevator %d.\n", floor_id, i);
+                printf("DETF: Added floor %d to elevator %d.\n", floor_id, i);
                 this->elevators[i].add_floor_to_destination_floors_queue(floor_id);
                 return;
             // The elevator is passed the floor the person wants to go to
             } else {
-                printf("Elevator %d is passed floor %d.", i, floor_id);
+                printf("DETF: Elevator %d is passed floor %d.", i, floor_id);
             }
         }
     }
@@ -100,7 +100,7 @@ void HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string direct
     // are stopped and then dispatch that one
     for (i = 0; i < 3; i++) {
         if (elevator_direction[i] == "stopped") {
-            printf("Stopped: Added floor %d to elevator %d.\n", floor_id, i);
+            printf("DETF: Added floor %d to elevator %d.\n", floor_id, i);
             this->elevators[i].add_floor_to_destination_floors_queue(floor_id);
             return;
         }
@@ -110,18 +110,18 @@ void HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string direct
     // add the floor to the elevator that will be done the soonest
     int elevator_with_smallest_queue = index_of_smallest_element(elevator_queue_size, 3);
     this->elevators[elevator_with_smallest_queue].add_floor_to_destination_floors_queue(floor_id);
-    printf("Smallest Queue: Added floor %d to elevator %d.\n", floor_id, elevator_with_smallest_queue);
+    printf("DETF: Added floor %d to elevator %d.\n", floor_id, elevator_with_smallest_queue);
     return;
 }
 
 // Method is called when a person presses the up or down arrows for an elevator on a certain floor
 void HotelControlSystem::press_elevator_button_from_floor(Floor &f, std::string direction) {
-    printf("%s button pressed on floor %d.\n", direction.c_str(), f.get_floor_id());
+    printf("PEBFF: %s button pressed on floor %d.\n", direction.c_str(), f.get_floor_id());
 
     // Change the direction button for the floor to what they user pressed
     // If the button was not pressed already for the floor, dispatch an elevator
     if (!f.floor_direction_button_already_set(direction)) {
-        std::cout << "Button has not been pressed for that floor yet." << std::endl;
+        std::cout << "PEBFF: Button has not been pressed for that floor yet." << std::endl;
         f.set_floor_direction_button(direction);
 
         // Determine which elevator to dispatch to the floor

@@ -14,6 +14,7 @@
 class Elevator {
     int elevator_id;
     int current_floor;
+    int destination_floor;
     std::queue<int> destination_floors_queue;
     bool floor_indicators_pressed[21];
     std::string direction_of_travel;
