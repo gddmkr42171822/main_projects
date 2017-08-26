@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -c -g
+CFLAGS = -Wall -c -g -std=c++14
 LFLAGS = -Wall
 
 main: build/main.o build/HotelControlSystem.o build/Floor.o build/Elevator.o build/Request.o

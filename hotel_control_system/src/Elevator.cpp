@@ -8,26 +8,28 @@
 
 
 void Elevator::advance_to_next_step() {
-    printf("ATNS: Elevators %d current floor is %d.\n", this->elevator_id, this->current_floor);
-    // Check to see if the queue has some floors to go to
-    if (!this->destination_floors_queue.empty()) {
-      // If we are at the correct floor which means the elevators current floor
-      // is the floor we were supposed to go to
-      if (this->destination_floors_queue.front() == this->current_floor) {
-          this->arrival_at_floor();
-      // If we arent at the correct floor we need to go to the next floor (increment or decrement) depending on
-      // the direction of travel we need to go
-      } else {
-          this->determine_direction_of_travel();
-          if (this->direction_of_travel == "up") {
-              this->current_floor += 1;
+    while (true) {
+        // Check to see if the queue has some floors to go to
+        if (!this->destination_floors_queue.empty()) {
+            printf("ATNS: Elevators %d current floor is %d.\n", this->elevator_id, this->current_floor);
+          // If we are at the correct floor which means the elevators current floor
+          // is the floor we were supposed to go to
+          if (this->destination_floors_queue.front() == this->current_floor) {
+              this->arrival_at_floor();
+          // If we arent at the correct floor we need to go to the next floor (increment or decrement) depending on
+          // the direction of travel we need to go
           } else {
-              this->current_floor -= 1;
+              this->determine_direction_of_travel();
+              if (this->direction_of_travel == "up") {
+                  this->current_floor += 1;
+              } else {
+                  this->current_floor -= 1;
+              }
           }
-      }
-    // The destination floor queue is empty and direction of travel will be stopped
-    } else {
-        this->determine_direction_of_travel();
+        // The destination floor queue is empty and direction of travel will be stopped
+        } else {
+            this->determine_direction_of_travel();
+        }
     }
 }
 

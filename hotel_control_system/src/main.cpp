@@ -4,18 +4,14 @@
 //
 
 /*
-  I'm thinking I need a thread for each elevator and which will work until the
-  destination queue of each elevator is empty.
+  Still need to handle requests on the request queue
+  Create mulitple instances so mulitple people can ask for elevators at the same time
 
-  The hotel control system needs a queue to handle all the requests from
-  people pushing buttons on the floors and in the elevators and also requests
-  from elevators as the arrive at a floor.
-
-  Also create an enumeration for "up", "down", and "stopped".
 */
 
 #include "HotelControlSystem.h"
 #include <iostream>
+#include <thread>
 
 
 // Simple testing function to check the code logic
@@ -142,9 +138,67 @@ void test_advance_to_next_step() {
     delete shared_queue;
 }
 
+void test_multi_threading() {
+    std::queue<Request*> *shared_queue = new std::queue<Request*>;
+    HotelControlSystem h = HotelControlSystem();
+    h.initialize_members(shared_queue);
+
+    Elevator* elevators = h.get_elevators();
+    Floor* floors = h.get_floors();
+
+    // elevators[0].add_floor_to_destination_floors_queue(10);
+    // elevators[0].add_floor_to_destination_floors_queue(12);
+    // elevators[0].add_floor_to_destination_floors_queue(18);
+    // elevators[0].set_current_floor(5);
+    // elevators[0].determine_direction_of_travel();
+    //
+    // elevators[1].set_current_floor(14);
+    // elevators[1].add_floor_to_destination_floors_queue(2);
+    // elevators[1].add_floor_to_destination_floors_queue(0);
+    // elevators[1].determine_direction_of_travel();
+    //
+    // elevators[2].set_current_floor(0);
+    // elevators[2].add_floor_to_destination_floors_queue(15);
+    // elevators[2].determine_direction_of_travel();
+    //
+    // h.display_current_elevator_information();
+    //
+    // h.press_elevator_button_from_floor(floors[12], "down");
+    // h.press_elevator_button_from_floor(floors[6], "up");
+
+    // Assign a thread to each elevator
+    std::thread t1(&Elevator::advance_to_next_step, &elevators[0]);
+    std::thread t2(&Elevator::advance_to_next_step, &elevators[1]);
+    std::thread t3(&Elevator::advance_to_next_step, &elevators[2]);
+
+    int floor, elevator;
+    std::string direction;
+
+    while (true) {
+        std::cout << "Please enter your current floor (0 - 20): " << std::endl;
+        std::cin >> floor;
+        std::cout << "Please enter a direction you would like to go (up or down): " << std::endl;
+        std::cin >> direction;
+        elevator = h.press_elevator_button_from_floor(floors[floor], direction);
+
+        // Figure out how to the elevator that arrived at the floor
+        printf("Elevator %d has been sent to your floor.\n", elevator);
+        std::cout << "Please enter the floor you would like to go to." << std::endl;
+        std::cin >> floor;
+        h.press_floor_button_from_elevator(elevators[elevator], floor);
+    }
+
+    t1.join();
+    t2.join();
+    t3.join();
+
+    h.display_current_elevator_information();
+}
+
 int main(int argc, const char * argv[]) {
-    test_dispatch_elevator_to_floor();
-    test_shared_queue();
-    test_advance_to_next_step();
+    // test_dispatch_elevator_to_floor();
+    // test_shared_queue();
+    // test_advance_to_next_step();
+    test_multi_threading();
     return 0;
 }

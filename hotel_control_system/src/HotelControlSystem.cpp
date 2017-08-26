@@ -60,7 +60,7 @@ void HotelControlSystem::show_elevators_current_floor(Elevator &e) {
 }
 
 // Method determines which elevator to send to the floor
-void HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string direction) {
+int HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string direction) {
     int i;
     int floor_id = f.get_floor_id();
     int elevator_closeness[3];
@@ -83,12 +83,12 @@ void HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string direct
             if (direction == "up" && elevator_closeness[i] <= 0) {
                 printf("DETF: Added floor %d to elevator %d.\n", floor_id, i);
                 this->elevators[i].add_floor_to_destination_floors_queue(floor_id);
-                return;
+                return i;
             // If the elevator is above or on the floor and the person wants to go down
             } else if (direction == "down" && elevator_closeness[i] >= 0) {
                 printf("DETF: Added floor %d to elevator %d.\n", floor_id, i);
                 this->elevators[i].add_floor_to_destination_floors_queue(floor_id);
-                return;
+                return i;
             // The elevator is passed the floor the person wants to go to
             } else {
                 printf("DETF: Elevator %d is passed floor %d.", i, floor_id);
@@ -102,7 +102,7 @@ void HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string direct
         if (elevator_direction[i] == "stopped") {
             printf("DETF: Added floor %d to elevator %d.\n", floor_id, i);
             this->elevators[i].add_floor_to_destination_floors_queue(floor_id);
-            return;
+            return i;
         }
     }
 
@@ -111,11 +111,12 @@ void HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string direct
     int elevator_with_smallest_queue = index_of_smallest_element(elevator_queue_size, 3);
     this->elevators[elevator_with_smallest_queue].add_floor_to_destination_floors_queue(floor_id);
     printf("DETF: Added floor %d to elevator %d.\n", floor_id, elevator_with_smallest_queue);
-    return;
+    return elevator_with_smallest_queue;
 }
 
 // Method is called when a person presses the up or down arrows for an elevator on a certain floor
-void HotelControlSystem::press_elevator_button_from_floor(Floor &f, std::string direction) {
+int HotelControlSystem::press_elevator_button_from_floor(Floor &f, std::string direction) {
+    int elevator = 0;
     printf("PEBFF: %s button pressed on floor %d.\n", direction.c_str(), f.get_floor_id());
 
     // Change the direction button for the floor to what they user pressed
@@ -125,8 +126,10 @@ void HotelControlSystem::press_elevator_button_from_floor(Floor &f, std::string 
         f.set_floor_direction_button(direction);
 
         // Determine which elevator to dispatch to the floor
-        this->dispatch_elevator_to_floor(f, direction);
+        elevator = this->dispatch_elevator_to_floor(f, direction);
     }
+
+    return elevator;
 }
 
 // Method is called when a person presses the specific floor button on an elevator
