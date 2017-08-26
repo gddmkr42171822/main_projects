@@ -25,6 +25,17 @@ void Floor::set_floor_direction_button(std::string direction) {
     }
 }
 
+void Floor::reset_floor_direction_button(std::string direction) {
+    if (direction == "up") {
+        this->up_button_pressed = false;
+    } else if (direction == "down"){
+        this->down_button_pressed = false;
+    } else {
+        // Floor was reached by pressing a button inside elevator
+        // so dont do anything
+    }
+}
+
 bool Floor::floor_direction_button_already_set(std::string direction) {
     if (direction == "up") {
         if (this->up_button_pressed == true) {

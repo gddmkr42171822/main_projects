@@ -16,6 +16,7 @@ public:
     int get_floor_id();
     void set_floor_id(int i);
     void set_floor_direction_button(std::string direction);
+    void reset_floor_direction_button(std::string direction);
     bool floor_direction_button_already_set(std::string direction);
     void initialize_members(int i);
 };

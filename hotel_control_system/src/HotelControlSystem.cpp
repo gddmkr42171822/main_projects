@@ -20,6 +20,28 @@ int index_of_smallest_element(int array[], int size)
     return index;
 }
 
+void HotelControlSystem::manage_request_queue() {
+    Request *r;
+    while (true) {
+        if (!this->request_queue->empty()) {
+            this->request_queue_mutex->lock();
+            std::cout << "HOTELCONTROLSYSTEM: mutex locked." << std::endl;
+            r = this->get_request_from_queue();
+            this->reset_floor_button(r->get_floor(), r->get_direction());
+            this->request_queue_mutex->unlock();
+            std::cout << "HOTELCONTROLSYSTEM: mutex unlocked." << std::endl;
+        }
+    }
+}
+
+void HotelControlSystem::reset_floor_button(int floor, std::string direction) {
+    // Only reset the floor direction button if it has been pressed for the floor
+    if (this->floors[floor].floor_direction_button_already_set(direction)) {
+        this->floors[floor].reset_floor_direction_button(direction);
+        printf("Reset floor direction button %s for floor %d.\n", direction.c_str(), floor);
+    }
+}
+
 Elevator* HotelControlSystem::get_elevators() {
     return this->elevators;
 }
@@ -29,11 +51,11 @@ Floor* HotelControlSystem::get_floors() {
 }
 
 // Initialize the elevators and floors for the hotel control system object
-void HotelControlSystem::initialize_members(std::queue<Request*> *request_queue) {
+void HotelControlSystem::initialize_members(std::queue<Request*> *request_queue, std::mutex *request_queue_mutex) {
     int i;
     for (i = 0; i < 3; i++) {
         this->elevators[i] = Elevator();
-        this->elevators[i].initialize_members(i, request_queue);
+        this->elevators[i].initialize_members(i, request_queue, request_queue_mutex);
     }
     for (i = 0; i < 21; i++) {
         this->floors[i] = Floor();
@@ -41,6 +63,7 @@ void HotelControlSystem::initialize_members(std::queue<Request*> *request_queue)
     }
 
     this->request_queue = request_queue;
+    this->request_queue_mutex = request_queue_mutex;
 }
 
 // Prints out where all the elevators are and what direciton they are travelling
@@ -82,12 +105,12 @@ int HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string directi
             // If the elevator is below or on the floor the person wants to go up
             if (direction == "up" && elevator_closeness[i] <= 0) {
                 printf("DETF: Added floor %d to elevator %d.\n", floor_id, i);
-                this->elevators[i].add_floor_to_destination_floors_queue(floor_id);
+                this->elevators[i].add_request_to_destination_floors_queue(new Request(floor_id, direction));
                 return i;
             // If the elevator is above or on the floor and the person wants to go down
             } else if (direction == "down" && elevator_closeness[i] >= 0) {
                 printf("DETF: Added floor %d to elevator %d.\n", floor_id, i);
-                this->elevators[i].add_floor_to_destination_floors_queue(floor_id);
+                this->elevators[i].add_request_to_destination_floors_queue(new Request(floor_id, direction));
                 return i;
             // The elevator is passed the floor the person wants to go to
             } else {
@@ -101,7 +124,7 @@ int HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string directi
     for (i = 0; i < 3; i++) {
         if (elevator_direction[i] == "stopped") {
             printf("DETF: Added floor %d to elevator %d.\n", floor_id, i);
-            this->elevators[i].add_floor_to_destination_floors_queue(floor_id);
+            this->elevators[i].add_request_to_destination_floors_queue(new Request(floor_id, direction));
             return i;
         }
     }
@@ -109,7 +132,7 @@ int HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string directi
     // No elevators are moving in the same direction as the floor, none are stopped either,
     // add the floor to the elevator that will be done the soonest
     int elevator_with_smallest_queue = index_of_smallest_element(elevator_queue_size, 3);
-    this->elevators[elevator_with_smallest_queue].add_floor_to_destination_floors_queue(floor_id);
+    this->elevators[elevator_with_smallest_queue].add_request_to_destination_floors_queue(new Request(floor_id, direction));
     printf("DETF: Added floor %d to elevator %d.\n", floor_id, elevator_with_smallest_queue);
     return elevator_with_smallest_queue;
 }
@@ -127,15 +150,16 @@ int HotelControlSystem::press_elevator_button_from_floor(Floor &f, std::string d
 
         // Determine which elevator to dispatch to the floor
         elevator = this->dispatch_elevator_to_floor(f, direction);
+    } else {
+        std::cout << "PEBFF: Button has already been pressed for that floor." << std::endl;
     }
-
     return elevator;
 }
 
 // Method is called when a person presses the specific floor button on an elevator
 void HotelControlSystem::press_floor_button_from_elevator(Elevator &e, int selected_floor) {
     // Push the selected floor into the destination queue of the elevator
-    e.add_floor_to_destination_floors_queue(selected_floor);
+    e.add_request_to_destination_floors_queue(new Request(selected_floor, "destination"));
 }
 
 Request* HotelControlSystem::get_request_from_queue() {

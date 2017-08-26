@@ -5,16 +5,19 @@
 
 #include "Elevator.h"
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 
 void Elevator::advance_to_next_step() {
     while (true) {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
         // Check to see if the queue has some floors to go to
         if (!this->destination_floors_queue.empty()) {
-            printf("ATNS: Elevators %d current floor is %d.\n", this->elevator_id, this->current_floor);
+            // printf("ATNS: Elevators %d current floor is %d.\n", this->elevator_id, this->current_floor);
           // If we are at the correct floor which means the elevators current floor
           // is the floor we were supposed to go to
-          if (this->destination_floors_queue.front() == this->current_floor) {
+          if (this->destination_floors_queue.front()->get_floor() == this->current_floor) {
               this->arrival_at_floor();
           // If we arent at the correct floor we need to go to the next floor (increment or decrement) depending on
           // the direction of travel we need to go
@@ -37,11 +40,15 @@ void Elevator::arrival_at_floor() {
     printf("AAF: Elevator %d arrived at floor %d.\n", this->elevator_id, this->current_floor);
 
     // Remove the floor from the desitination floors queue
-    this->destination_floors_queue.pop();
+    Request *df = this->remove_floor_from_destination_floors_queue();
+
 
     // Alert hotel control system to turn the floors lights off on that floor
-    Request *r = new Request(this->current_floor, this->direction_of_travel);
-    this->add_request_to_queue(r);
+    this->request_queue_mutex->lock();
+    std::cout << "ELEVATOR: mutex locked." << std::endl;
+    this->add_request_to_queue(df);
+    this->request_queue_mutex->unlock();
+    std::cout << "ELEVATOR: mutex unlocked." << std::endl;
 
     // Set the floor indicator to false if it pressed for that floor
     this->floor_indicators_pressed[this->current_floor] = false;
@@ -51,7 +58,7 @@ void Elevator::arrival_at_floor() {
 }
 
 
-void Elevator::initialize_members(int i, std::queue<Request*> *request_queue) {
+void Elevator::initialize_members(int i, std::queue<Request*> *request_queue, std::mutex *request_queue_mutex) {
     this->elevator_id = i;
     // Set the current floor and destination floor button are set to the bottom floor
     this->current_floor = 0;
@@ -66,16 +73,17 @@ void Elevator::initialize_members(int i, std::queue<Request*> *request_queue) {
     }
 
     this->request_queue = request_queue;
+    this->request_queue_mutex = request_queue_mutex;
 }
 
 void Elevator::determine_direction_of_travel() {
     // If the elevator has no floors to go to then it should be stopped
     if (this->destination_floors_queue.empty()) {
         this->direction_of_travel = "stopped";
-    } else if (this->current_floor < this->destination_floors_queue.front()) {
+    } else if (this->current_floor < this->destination_floors_queue.front()->get_floor()) {
     // The elevator must travel up if the floor in its queue to higher than its current floor
         this->direction_of_travel = "up";
-    } else if (this->current_floor > this->destination_floors_queue.front()) {
+    } else if (this->current_floor > this->destination_floors_queue.front()->get_floor()) {
         // The elevator must travel down if the floor in its queue to lower than its current floor
         this->direction_of_travel = "down";
     } else {
@@ -99,14 +107,14 @@ std::string Elevator::get_direction_of_travel() {
     return this->direction_of_travel;
 }
 
-void Elevator::add_floor_to_destination_floors_queue(int floor) {
-    this->destination_floors_queue.push(floor);
+void Elevator::add_request_to_destination_floors_queue(Request *r) {
+    this->destination_floors_queue.push(r);
 }
 
-int Elevator::remove_floor_from_destination_floors_queue() {
-    int removed_floor = this->destination_floors_queue.front();
+Request* Elevator::remove_floor_from_destination_floors_queue() {
+    Request *r = this->destination_floors_queue.front();
     this->destination_floors_queue.pop();
-    return removed_floor;
+    return r;
 }
 
 int Elevator::destination_floors_queue_size() {
