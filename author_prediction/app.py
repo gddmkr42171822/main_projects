@@ -3,7 +3,7 @@ from flask import render_template
 from flask import request
 import numpy as np
 from run_prediction_program import AuthorPrediction
-from run_prediction_program import Preprocesscsv_files
+from run_prediction_program import PreprocessSamplesFromCSVFiles
 
 app = Flask(__name__)
 
@@ -15,9 +15,8 @@ def hello_world():
         print request.form
         if 'sentence' in request.form:
             sentence = request.form['sentence']
-            preprocessed_sentence = Preprocesscsv_files(np.array([sentence]), True, True, True)
-            transformed_sentence = ap.fu.transform(preprocessed_sentence)
-            author = ap.clf.predict(transformed_sentence)[0]
+            preprocessed_sentence, _  = PreprocessSamplesFromCSVFiles(['unknown'], [sentence], True, False, False, False)
+            author = ap.pipeline.predict(preprocessed_sentence)[0]
             ap.preprocessed_sentence = preprocessed_sentence
             return render_template('index.html', author=author)
         elif 'isCorrectAuthor' in request.form:
@@ -30,8 +29,7 @@ def hello_world():
                 ap.AddTrainingSampleToDatabase(ap.author, ap.preprocessed_sentence[0])
                 ap.preprocessed_X = np.append(ap.preprocessed_X, ap.preprocessed_sentence)
                 ap.y = np.append(ap.y, ap.author)
-                X = ap.fu.fit_transform(ap.preprocessed_X)
-                ap.clf.fit(X, ap.y)
+                ap.pipeline.fit(ap.preprocessed_X, ap.y)
                 authors = np.unique(ap.y)
                 num_training_samples = len(ap.preprocessed_X)
                 return render_template('index.html', incorrect=True, num_training_samples=num_training_samples, authors=authors)
