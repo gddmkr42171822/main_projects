@@ -4,21 +4,10 @@
 //
 
 #include "HotelControlSystem.h"
+#include "Utils.h"
 #include <stdio.h>
 #include <iostream>
 #include <stdlib.h>
-
-int index_of_smallest_element(int array[], int size)
-{
-    int index = 0;
-    for (int i = 1; i < size; i++)
-    {
-        if(array[i] < array[index]) {
-            index = i;
-        }
-    }
-    return index;
-}
 
 void HotelControlSystem::manage_request_queue() {
     Request *r;
@@ -131,7 +120,7 @@ int HotelControlSystem::dispatch_elevator_to_floor(Floor &f, std::string directi
 
     // No elevators are moving in the same direction as the floor, none are stopped either,
     // add the floor to the elevator that will be done the soonest
-    int elevator_with_smallest_queue = index_of_smallest_element(elevator_queue_size, 3);
+    int elevator_with_smallest_queue = Utils::indexOfSmallestElement(elevator_queue_size, 3);
     this->elevators[elevator_with_smallest_queue].add_request_to_destination_floors_queue(new Request(floor_id, direction));
     printf("DETF: Added floor %d to elevator %d.\n", floor_id, elevator_with_smallest_queue);
     return elevator_with_smallest_queue;

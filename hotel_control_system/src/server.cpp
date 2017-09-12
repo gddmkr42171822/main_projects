@@ -3,14 +3,6 @@
 #include "rpc/server.h"
 #include "HotelControlSystem.h"
 
-void foo() { std::cout << "foo was called!" << std::endl; }
-
-void bad(int x) {
-    if (x == 5) {
-        throw std::runtime_error("x == 5. I really don't like 5.");
-    }
-}
-
 int main() {
     std::queue<Request*> *shared_queue = new std::queue<Request*>;
     std::mutex *request_queue_mutex = new std::mutex;
@@ -30,6 +22,8 @@ int main() {
     rpc::server srv("0.0.0.0", rpc::constants::DEFAULT_PORT);
 
     int press_elevator_button_from_floor(Floor &f, std::string direction);
+
+    // Add a couple of remote procedure calls to handle from the connected client
     srv.bind("get_request_queue_size", [&h]() {return h.get_request_queue_size();});
     srv.bind("press_elevator_button_from_floor", [&h](int floor_number, std::string direction) {
         return h.press_elevator_button_from_floor(h.get_floors()[floor_number], direction);

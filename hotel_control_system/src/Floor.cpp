@@ -38,17 +38,9 @@ void Floor::reset_floor_direction_button(std::string direction) {
 
 bool Floor::floor_direction_button_already_set(std::string direction) {
     if (direction == "up") {
-        if (this->up_button_pressed == true) {
-            return true;
-        } else {
-            return false;
-        }
+        return (this->up_button_pressed == true);
     } else {
-        if (this->down_button_pressed == true) {
-            return true;
-        } else {
-            return false;
-        }
+        return (this->down_button_pressed == true);
     }
 }
 
