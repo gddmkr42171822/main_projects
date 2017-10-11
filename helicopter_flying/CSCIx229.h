@@ -16,7 +16,7 @@
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 //#include "SDL.h"
-#include "SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
 #else
 #include <GL/glut.h>
 //#include <SDL/SDL.h>

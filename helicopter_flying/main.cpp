@@ -21,9 +21,9 @@
 int mode=0;    //  Display mode
 char* text[] = {"Flight", "Sky Box", "Ground", "Collision Detection",
 					"Weapon", "Sound"};
-						
 
-// Sound that will perpectaully play
+
+// Sound that will perpectually play
 Mix_Music* music = NULL;
 
 //The sound effects that will be used
@@ -152,7 +152,7 @@ int heightMap[65][65]={
 /*
  * This function sets the little bird position
  * and randomly generates the coordinates for the
- * trees and buildings.
+ * trees and buildings and initializes the sound.
  */
 void init(){
 	littleBirdPosition[0] = 0; littleBirdPosition[1] = 2; littleBirdPosition[2] = 0;
@@ -190,15 +190,15 @@ void init(){
 	}
 
 	//  Initialize audio
-	if (Mix_OpenAudio(44100,AUDIO_S16SYS,2,4096)) Fatal("Cannot initialize audio\n");	
+	if (Mix_OpenAudio(44100,AUDIO_S16SYS,2,4096)) Fatal("Cannot initialize audio\n");
 	//  Load the helicopter sound
-	music = Mix_LoadMUS("helicopter.wav");
+	music = Mix_LoadMUS("audio/helicopter.wav");
 	if (!music) Fatal("Cannot load helicopter.wav\n");
 	// Load the shooting bullet sound
-	shot = Mix_LoadWAV( "shot.wav" );
+	shot = Mix_LoadWAV( "audio/shot.wav" );
 	if (!music) Fatal("Cannot load shot.wav\n");
 	// Load the sound of an explosion
-	bomb = Mix_LoadWAV( "bomb.wav" );
+	bomb = Mix_LoadWAV( "audio/bomb.wav" );
 	if (!music) Fatal("Cannot load bomb.wav\n");
 	//  Play (looping)
 	Mix_PlayMusic(music,-1);
@@ -1138,7 +1138,7 @@ void checkCollision(){
 					pitch=roll=strafe=fly=bankFactor=bankAngle=speed=0;
 					if(mode==5){
 						Mix_PlayChannel(-1,bomb,0);
-						// Pause music playback
+						// Pause helicopter flight noise
 						Mix_PauseMusic();
 					}
 					return;
@@ -1162,7 +1162,6 @@ void checkCollision(){
 						if(yH<=y&&yH>= -1){
 							trees[i][2] = 1;
 							if(mode==5){
-								// Pause music playback
 								Mix_PlayChannel(-1,bomb,0);
 							}
 							return;
@@ -1181,7 +1180,6 @@ void checkCollision(){
 						if(yH<=y&&yH>=-2){
 							buildings[i][2] = 1;
 							if(mode==5){
-								// Pause music playback
 								Mix_PlayChannel(-1,bomb,0);
 							}
 							return;
@@ -1456,6 +1454,7 @@ void display()
 	glEnable(GL_CULL_FACE);
 	glLoadIdentity();
 
+	// Set the position of the camera behind the helicopter
 	double behindX = 10*directionVec->x;
 	double behindY = 10*directionVec->y;
 	double behindZ = 10*directionVec->z;
@@ -1463,15 +1462,18 @@ void display()
 	double heightX = 3*upVec->x;
 	double heightY = 3*upVec->y;
 	double heightZ = 3*upVec->z;
-	// Fly the helicopter around the scene
+
+	// Fly the helicopter around the scene while keeping the position of the camera
 	gluLookAt(littleBirdPosition[0]-behindX+heightX,littleBirdPosition[1]-behindY+heightY,littleBirdPosition[2]-behindZ+heightZ,
 			  littleBirdPosition[0],littleBirdPosition[1],littleBirdPosition[2],
 			  upVec->x,upVec->y,upVec->z);
 
-	/* Code for where the light source will be.
+	/*
+	 * Code for where the light source will be.
 	 * The light source acts like a sun and is outside
 	 * of the sky box.
-	 */
+	*/
+
 	//  Translate intensity to color vectors
 	float Ambient[]   = {0.01*30,0.01*30,0.01*30,1.0};
 	float Diffuse[]   = {0.01*100,0.01*100,0.01*100,1.0};
@@ -1498,9 +1500,9 @@ void display()
 	glLightfv(GL_LIGHT0,GL_DIFFUSE ,Diffuse);
 	glLightfv(GL_LIGHT0,GL_SPECULAR,Specular);
 	glLightfv(GL_LIGHT0,GL_POSITION,Position);
-	
+
 	glDisable(GL_LIGHTING);
-	
+
 	if(mode==0){
 		const double len=2.0; // Length of axes
 		// Pause music playback
@@ -1547,7 +1549,7 @@ void display()
 		drawScene();
 		Mix_ResumeMusic();
 	}
-	
+
 	glDisable(GL_LIGHTING);
 	glColor3f(1,1,1);
 	//  Display parameters
@@ -1579,30 +1581,30 @@ int main(int argc,char* argv[])
 	glutKeyboardFunc(key);
 
 	// Load the textures for the helicopter
-	littlebird[1] = LoadTexBMP("littlebirdenginetank.bmp");
-	littlebird[2] = LoadTexBMP("littlebirdcockpit.bmp");
-	littlebird[3] = LoadTexBMP("littlebirdengine.bmp");
-	littlebird[4] = LoadTexBMP("littlebirdskidmount.bmp");
-	littlebird[5] = LoadTexBMP("littlebirdskid.bmp");
-	littlebird[6] = LoadTexBMP("littlebirdrotor.bmp");
-	littlebird[7] = LoadTexBMP("littlebirdgear.bmp");
+	littlebird[1] = LoadTexBMP("textures/littlebirdenginetank.bmp");
+	littlebird[2] = LoadTexBMP("textures/littlebirdcockpit.bmp");
+	littlebird[3] = LoadTexBMP("textures/littlebirdengine.bmp");
+	littlebird[4] = LoadTexBMP("textures/littlebirdskidmount.bmp");
+	littlebird[5] = LoadTexBMP("textures/littlebirdskid.bmp");
+	littlebird[6] = LoadTexBMP("textures/littlebirdrotor.bmp");
+	littlebird[7] = LoadTexBMP("textures/littlebirdgear.bmp");
 
 	// Load the textures for the sky
-	sky[0] = LoadTexBMP("left.bmp");
-	sky[1] = LoadTexBMP("right.bmp");
-	sky[2] = LoadTexBMP("front.bmp");
-	sky[3] = LoadTexBMP("back.bmp");
-	sky[4] = LoadTexBMP("top.bmp");
-	sky[5] = LoadTexBMP("bottom.bmp");
+	sky[0] = LoadTexBMP("textures/left.bmp");
+	sky[1] = LoadTexBMP("textures/right.bmp");
+	sky[2] = LoadTexBMP("textures/front.bmp");
+	sky[3] = LoadTexBMP("textures/back.bmp");
+	sky[4] = LoadTexBMP("textures/top.bmp");
+	sky[5] = LoadTexBMP("textures/bottom.bmp");
 
 	// Load the textures for the trees
-	tree[0] = LoadTexBMP("bark.bmp");
-	tree[1] = LoadTexBMP("tree.bmp");
+	tree[0] = LoadTexBMP("textures/bark.bmp");
+	tree[1] = LoadTexBMP("textures/tree.bmp");
 
 	// Load the textures for the buildings
-	building[0] = LoadTexBMP("wall.bmp");
-	building[1] = LoadTexBMP("ceiling.bmp");
-	building[2] = LoadTexBMP("door.bmp");
+	building[0] = LoadTexBMP("textures/wall.bmp");
+	building[1] = LoadTexBMP("textures/ceiling.bmp");
+	building[2] = LoadTexBMP("textures/door.bmp");
 
 	//  Check if any errors have occurred
 	ErrCheck("init");
@@ -1613,5 +1615,3 @@ int main(int argc,char* argv[])
 	Mix_CloseAudio();
 	return 0;
 }
-
-
