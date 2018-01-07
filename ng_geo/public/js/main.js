@@ -384,12 +384,19 @@ function checkTestAnswers() {
 }
 
 function checkStreetAnswers($providedValue, expectedValue) {
-    if ($providedValue.val() === expectedValue) {
+    if ($providedValue.val() == '') 
+    {
+        $providedValue.removeClass("incorrect").removeClass("correct");
+    }
+    else if ($providedValue.val() === expectedValue) 
+    {
         $providedValue.addClass("correct").removeClass("incorrect");
         if (numCorrectTextBoxes < markers.length) {
             numCorrectTextBoxes = numCorrectTextBoxes + 1;
         }
-    } else {
+    } 
+    else 
+    {
         $providedValue.addClass("incorrect").removeClass("correct");
     }
 

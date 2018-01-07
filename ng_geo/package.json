@@ -1,0 +1,21 @@
+{
+	"name": "ng_geo",
+	"version": "1.0.0",
+	"description": "Northglenn Geography Program",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/rwerthman/main_projects.git"
+	},
+	"license": "0BSD",
+	"main": "server.js",
+	"scripts": {
+		"start": "nodemon"
+	},
+	"dependencies": {
+		"dotenv": "^4.0.0",
+		"ejs": "^2.5.7",
+		"express": "^4.16.0",
+		"mongoose": "^5.0.0-rc2",
+		"nodemon": "^1.14.8"
+	}
+}
